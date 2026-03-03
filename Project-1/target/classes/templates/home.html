@@ -12,7 +12,7 @@
     <p>Logged in as: <b th:text="${username}"></b></p>
 
     <p>Create your schedule <a th:href="@{/schedule}">here!</a></p>
-    <p>Open you video player <a th:href="@{/videoButton}">here!</a></p>
+    <p>Open your video player <a th:href="@{/videoButton}">here!</a></p>
 
     <form th:action="@{/logout}" method="post">
         <input type="hidden" th:name="_csrf" th:value="${_csrf.token}">
