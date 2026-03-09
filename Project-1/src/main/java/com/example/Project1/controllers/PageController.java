@@ -12,9 +12,9 @@ public class PageController
 {
     
     @GetMapping("/")
-    public String index()
+    public String root(Principal principal)
     {
-        return "index";
+        return (principal != null) ? "redirect:/home" : "redirect:/login";
     }
 
 
