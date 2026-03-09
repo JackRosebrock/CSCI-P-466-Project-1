@@ -7,10 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.Project1.domain.ScheduleService;
+
 @Controller
 public class PageController 
 {
+
+    private final ScheduleService scheduleService;
+
+        public PageController(ScheduleService scheduleService)
+        {
+            this.scheduleService = scheduleService;
+        }
     
+
     @GetMapping("/")
     public String root(Principal principal)
     {
@@ -29,6 +39,7 @@ public class PageController
     public String home(Model model, Principal principal)
     {
         model.addAttribute("username", principal.getName());
+        model.addAttribute("schedules", scheduleService.list(principal.getName()));
         return "home";
     }
 

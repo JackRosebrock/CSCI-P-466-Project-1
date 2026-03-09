@@ -1,7 +1,8 @@
-CREATE TABLE IF NOT EXISTS video_schedule
-id INTEGER PRIMARY KEY AUTOINCREMENT
-username TEXT NOT NULL,
-title TEXT,
-video_url TEXT NOT NULL
-start_time TEXT NOT NULL,
-end_time TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS video_schedule (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT NOT NULL,
+  title TEXT,
+  video_url TEXT NOT NULL,
+  start_time TEXT NOT NULL,
+  end_time TEXT NOT NULL
+);
