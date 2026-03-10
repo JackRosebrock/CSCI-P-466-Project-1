@@ -1,43 +1,19 @@
-# Stage 1: Build
-FROM maven:3.9-eclipse-temurin-17-alpine AS build
-
-WORKDIR /build
-
-# Copy pom.xml and download dependencies (layer caching)
+# ---- Build stage ----
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
-# Copy source and build
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn -q -DskipTests=false test package
 
-# Stage 2: Runtime
-FROM eclipse-temurin:17-jre-alpine
-
+# ---- Run stage ----
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Create non-root user
-RUN addgroup -S spring && adduser -S spring -G spring
+# Create folder for SQLite db (important)
+RUN mkdir -p /app/data
 
-# Create data directory for SQLite
-RUN mkdir -p /app/data && chown -R spring:spring /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Copy JAR from build stage
-COPY --from=build --chown=spring:spring /build/target/*.jar app.jar
-
-# Switch to non-root user
-USER spring:spring
-
-# Expose port
 EXPOSE 8080
-
-# Environment variables
-ENV SPRING_DATASOURCE_URL=jdbc:sqlite:/app/data/tacocloud.db \
-    JAVA_OPTS="-Xms256m -Xmx512m"
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
-
-# Run application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENV PORT=8080
+ENTRYPOINT ["java","-jar","app.jar"]
