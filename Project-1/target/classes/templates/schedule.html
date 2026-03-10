@@ -8,8 +8,40 @@
 
 <!--Schedule Page with options to create, edit, or delete their schedule-->
 <body>
-    <h1>My Schedule</h1>
-    <p>This is where the user will be able to create, edit, and delete their schedule.</p>
+    <p><a th:href="@{/schedule/new}">Add a Video</a> Or <a th:href="@{/home}">Go to Homepage</a></p>
 
-    <p>Back to <a th:href="@{/home}">Homepage</a></p>
+    <table border = "2" cellpadding = "6">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>URL</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:if="${#lists.isEmpty(schedules)}" >
+                <td colspan ="5">No videos are currently scheduled.</td>
+            </tr>
+
+            <tr th:each="s : ${schedules}">
+                <td th:text="${s.title}"></td>
+                <td><a th:href="${s.videoUrl}" th:text="${s.videoUrl}"></a></td>
+                <td th:text="${s.startTime}"></td>
+                <td th:text="${s.endTime}"></td>
+
+                <td>
+                    <a th:href="@{'/schedule/' + ${s.id} + '/edit'}">Edit</a>
+
+                    <form th:action="@{'/schedule/' + ${s.id} + '/delete'}" method="post" style="display:inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>    
 </body>
+</html>

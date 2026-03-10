@@ -42,12 +42,7 @@ public class PageController
         model.addAttribute("schedules", scheduleService.list(principal.getName()));
         return "home";
     }
-
-    @GetMapping("/schedule")
-    public String schedule()
-    {
-        return "schedule";
-    }
+    
 
     @GetMapping("/videoButton")
     public String videoButton()
