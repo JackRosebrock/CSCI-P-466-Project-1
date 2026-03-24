@@ -1,17 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8">
-        <title>Video Player</title>
+<head>
+  <meta charset="utf-8">
+  <title>Video Player</title>
+  <style>
+    .player-wrap { max-width: 960px; }
+    .ratio { position: relative; padding-top: 56.25%; }
+    .ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+  </style>
+</head>
 
-        <style>
-            .player-wrap {max-width: 960px; }
-            .ratio { position: relative; padding-top: 56.25%; }
-            .ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
-        </style>
-    </head>
+<body>
+  <h1>Video Player</h1>
 
-    <body>
-        <h1>Video Player</h1>
-    </body>
+  <!-- No video due -->
+  <div th:if="${schedule == null}">
+    <p><b>No video is scheduled to play right now.</b></p>
+
+    <div th:if="${next != null}">
+      <p>Next scheduled video:</p>
+      <ul>
+        <li><b th:text="${next.title}"></b></li>
+        <li>Starts: <span th:text="${next.startTime}"></span></li>
+        <li>Ends: <span th:text="${next.endTime}"></span></li>
+        <li>URL: <a th:href="${next.videoUrl}" th:text="${next.videoUrl}"></a></li>
+      </ul>
+      <p>Come back after the start time (or refresh this page) to play it.</p>
+    </div>
+
+    <p><a th:href="@{/home}">Back to Home</a></p>
+  </div>
+
+  <!-- Video due -->
+  <div th:if="${schedule != null}" class="player-wrap">
+    <h2 th:text="${schedule.title}">Scheduled Video</h2>
+
+    <p>
+      Start: <span th:text="${schedule.startTime}"></span>
+      &nbsp;|&nbsp;
+      End: <span th:text="${schedule.endTime}"></span>
+    </p>
+
+    <p>
+      Starting at <b th:text="${startSeconds}"></b> seconds (how late you are compared to the scheduled start time).
+    </p>
+
+    <div class="ratio">
+      <iframe
+        th:src="@{'https://www.youtube.com/embed/' + ${videoId} + '?autoplay=1&start=' + ${startSeconds} + '&rel=0&playsinline=1'}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p>If autoplay is blocked by your browser, click play inside the video.</p>
+    <p><a th:href="@{/home}">Back to Home</a></p>
+  </div>
+</body>
 </html>
