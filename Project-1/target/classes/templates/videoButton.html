@@ -9,8 +9,11 @@
 <!--Video Button Page with the button to start playing the user's scheduled-->
 <body>
     <h1>Video Player</h1>
-    <p>This is the button that will (eventually) let the user begin playing their scheduled video.</p>
-    <button>Play</button>
+    <p>This is the button that will let the user begin playing their scheduled video.</p>
+
+    <form th:action="@{/player}" method="get">
+        <button type="submit">Play</button>
+    </form>
 
     <p>Back to <a th:href="@{/home}">Homepage</a></p>
 </body>

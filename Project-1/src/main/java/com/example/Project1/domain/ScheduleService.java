@@ -2,11 +2,13 @@ package com.example.Project1.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.example.Project1.data.VideoSchedule;
 import com.example.Project1.data.VideoScheduleRepository;
+import com.example.Project1.data.VideoSchedule;
 
 
 @Service
@@ -26,7 +28,7 @@ public class ScheduleService
     }
 
 
-    // Get a specific video for a user
+    // Get a specific video for a user, by its video id
     public VideoSchedule getForUser(Long id, String username) 
     {
         return repo.findByIdAndUsername(id, username)
@@ -43,7 +45,7 @@ public class ScheduleService
     }
 
 
-    // Updates the user's current 
+    // Updates the user's current schedule
     public void update(Long id, String username, String title, String videoUrl, LocalDateTime start, LocalDateTime end)
     {
         validateTimes(start, end);
@@ -61,6 +63,29 @@ public class ScheduleService
         repo.deleteById(id);
     }
 
+    // Find the currently due video
+    public Optional<VideoSchedule> findCurrentlyDue(String username, LocalDateTime now)
+    {
+        return repo.findByUsernameOrderByStartTimeAsc(username).stream()
+            .filter(s -> !s.startTime().isAfter(now) && s.endTime().isAfter(now))
+            .findFirst();
+    }
+
+    // Find the next scheduled video
+    public Optional<VideoSchedule> findNextScheduled(String username, LocalDateTime now)
+    {
+        return repo.findByUsernameOrderByStartTimeAsc(username).stream()
+            .filter(s -> s.startTime().isAfter(now))
+            .findFirst();
+    }
+
+    // The video should only be playable if it belongs to the user AND is currently due
+
+    public Optional<VideoSchedule> findPlayableById(String username, Long id, LocalDateTime now)
+    {
+        return repo.findByIdAndUsername(id, username)
+            .filter(s -> !s.startTime().isAfter(now) && s.endTime().isAfter(now));
+    }
 
     private void validateTimes(LocalDateTime start, LocalDateTime end)
     {
