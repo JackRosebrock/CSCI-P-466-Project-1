@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.Project1.data.VideoSchedule;
 import com.example.Project1.data.VideoScheduleRepository;
-import com.example.Project1.data.VideoSchedule;
 
 
 @Service
@@ -36,6 +35,7 @@ public class ScheduleService
     }
 
 
+    // Creates a new video for the user's schedule
     public void create(String username, String title, String videoUrl, LocalDateTime start, LocalDateTime end)
     {
         validateTimes(start, end);
@@ -56,6 +56,7 @@ public class ScheduleService
     }
 
 
+    // Deletes a video from the user's schedule
     public void delete(Long id, String username)
     {
         VideoSchedule schedule = getForUser(id, username);
@@ -87,6 +88,7 @@ public class ScheduleService
             .filter(s -> !s.startTime().isAfter(now) && s.endTime().isAfter(now));
     }
 
+    // Validates the start and end times don't overlap each other
     private void validateTimes(LocalDateTime start, LocalDateTime end)
     {
         if (start == null || end == null)
@@ -101,6 +103,7 @@ public class ScheduleService
     }
 
 
+    // Validates that the new video doesn't overlap with any of the user's scheduled videos
     private void ensureNoOverlap(String username, LocalDateTime start, LocalDateTime end, Long excludeId)
     {
         for (VideoSchedule entry : repo.findByUsernameOrderByStartTimeAsc(username))

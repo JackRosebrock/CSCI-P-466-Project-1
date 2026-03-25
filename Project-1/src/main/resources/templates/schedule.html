@@ -10,6 +10,7 @@
 <body>
     <p><a th:href="@{/schedule/new}">Add a Video</a> Or <a th:href="@{/home}">Go to Homepage</a></p>
 
+    <!--Displays the User's current Schedule Table (if any videos are scheduled)-->
     <table border = "2" cellpadding = "6">
         <thead>
             <tr>
@@ -36,6 +37,8 @@
                     <a th:href="@{'/schedule/' + ${s.id} + '/edit'}">Edit</a>
 
                     <form th:action="@{'/schedule/' + ${s.id} + '/delete'}" method="post" style="display:inline;">
+                        
+                        <!--CSRF token (for security)-->
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <button type="submit">Delete</button>
                     </form>

@@ -21,6 +21,7 @@ public class PageController
         }
     
 
+    // Redirects root URL to home page if logged in, or login page if not
     @GetMapping("/")
     public String root(Principal principal)
     {
@@ -28,6 +29,7 @@ public class PageController
     }
 
 
+    // Login page
     @GetMapping("/login")
     public String login()
     {
@@ -35,6 +37,7 @@ public class PageController
     }
 
 
+    // Home page showing the user's current schedule
     @GetMapping("/home")
     public String home(Model model, Principal principal)
     {
@@ -44,6 +47,7 @@ public class PageController
     }
     
 
+    // Video player page
     @GetMapping("/videoButton")
     public String videoButton()
     {

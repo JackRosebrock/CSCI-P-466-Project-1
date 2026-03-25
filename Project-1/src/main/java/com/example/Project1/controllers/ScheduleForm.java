@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+// A set of fields for the schedule form
 public class ScheduleForm 
 {
     private Long id;

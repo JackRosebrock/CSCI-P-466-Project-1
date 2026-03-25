@@ -37,6 +37,7 @@ public class SecurityConfig
     @Bean
     UserDetailsService userDetailsService()
     {
+        // Just a standard user for the application
         UserDetails student = User.withDefaultPasswordEncoder()
             .username("student")
             .password("password")

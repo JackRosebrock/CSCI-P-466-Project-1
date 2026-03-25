@@ -2,13 +2,17 @@ package com.example.Project1.controllers;
 
 import java.security.Principal;
 
-import com.example.Project1.domain.ScheduleService;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.Project1.domain.ScheduleService;
 
+// Controller for handling web requests for the schedule page
 @Controller
 @RequestMapping("/schedule")
 public class ScheduleController 
@@ -21,6 +25,7 @@ public class ScheduleController
     }
 
 
+    // Returns a list of the user's scheduled videos
     @GetMapping
     public String list(Model model, Principal principal)
     {
@@ -30,6 +35,7 @@ public class ScheduleController
     }
 
 
+    // Returns the form for scheduling a new video
     @GetMapping("/new")
     public String newForm(Model model)
     {
@@ -39,6 +45,7 @@ public class ScheduleController
     }
 
 
+    // Handles submitting the form for scheduling a new video
     @PostMapping
     public String create(@ModelAttribute("form") ScheduleForm form, Model model, Principal principal)
     {
@@ -48,6 +55,7 @@ public class ScheduleController
 
             return "redirect:/schedule";
         } 
+
         catch (IllegalArgumentException e) 
         {
             model.addAttribute("error", e.getMessage());
@@ -57,6 +65,7 @@ public class ScheduleController
     }
 
 
+    // Handles deleting a video from the user's schedule
     @PostMapping("/{id}/delete")
     public String Delete(@PathVariable Long id, Principal principal)
     {
@@ -65,7 +74,8 @@ public class ScheduleController
         return "redirect:/schedule";
     }
 
-    
+
+    // Returns the form for editing a scheduled video
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, Principal principal)
     {
@@ -85,6 +95,7 @@ public class ScheduleController
     }
 
     
+    // Handles submitting the form for editing a scheduled video
     @PostMapping("/{id}")
     public String update(@PathVariable Long id, @ModelAttribute("form") ScheduleForm form, Model model, Principal principal)
     {
